@@ -217,39 +217,27 @@ public class Personne implements Serializable {
 
 
     // Fonction pour retourner les descendants d'une personne
-/*
+
     public LinkedList<Personne> getDescendants() {
 
-       ma 2eme fonction
-        Personne p;
-
         LinkedList<Personne> descendants = new LinkedList<Personne>();
-        ArbreGene arbr = new ArbreGene();
-        for (p : arbr.arbre) {
-            if (p.getAscendants().contains(this)){
-                descendants.add(p);}
-        }
-        return descendants;
-        }*/
 
+        if (this.getEnf().isEmpty()) { //pas de parents
 
-        /* première fonction
-        if (this.enfants.isEmpty()) { //pas de parents
-            System.out.println("liste vide");
             return descendants;
 
         } else {
-            System.out.println("liste non vide");
-            for (Personne e: this.getEnfants() )
+
+            for (Personne e: this.getEnf() ){
             descendants.add(e);
-            //descendants.add(e.getDesc)
+            descendants.addAll(e.getDescendants());}
            // for (Personne e: enfants )
            // descendants.addAll(e.enfants);
-             return this.enfants;
+             return descendants;
         }
 
 
-    } */
+    }
 
 
 
@@ -279,7 +267,7 @@ public class Personne implements Serializable {
         LinkedList<Personne> neveux = new LinkedList<Personne>();
         if (this.getFraternels() != null) {
             for (Personne f : this.getFraternels()) {
-                neveux.addAll(f.getEnfants());
+                neveux.addAll(f.getEnf());
             }
         }
         return neveux;
@@ -296,7 +284,7 @@ public class Personne implements Serializable {
         LinkedList<Personne> cousins = new LinkedList<Personne>();
         if (this.getOncles() != null) {
             for (Personne p : this.getOncles())
-                cousins.addAll(p.getEnfants());
+                cousins.addAll(p.getEnf());
         }
         return cousins;
     }
@@ -307,22 +295,8 @@ public class Personne implements Serializable {
 
     // Fonction pour retourner le frère ainé d'une personne
     public Personne getAine() {
-      /*  Personne p2 = null;
-        int age = 0;
-        if (!this.getFraternels().isEmpty()) {
-            System.out.println(this.getFraternels().size());
-
-            for (Personne p : this.getFraternels()) {
-                if (p.getAge(p.dateNaissance) > age) {
-                    age = p.getAge(p.dateNaissance);
-                    p2 = p;
-                }
-            }
-            return p2;
-
-        }*/
         if (this.parent != null) {
-            if (!this.parent.enfants.isEmpty())
+            if (!this.parent.getEnf().isEmpty())
                 return this.parent.getEnf().get(0);
             else return null;
 }       else return null;
@@ -335,10 +309,10 @@ public class Personne implements Serializable {
 // Fonction qui nous permet de savoir si une personne est l'enfant d'une autre personne
 
     public boolean estEnfantde(Personne cible){
-        if(parent == null ){
+        if(this.getParent() == null ){
             return false;
         }
-        if(parent.equals(cible)) {
+        if(this.getParent().equals(cible)) {
             return true;
         } else{
             return false;
@@ -368,9 +342,9 @@ public class Personne implements Serializable {
     public boolean estFraternelde(Personne cible){
         if(this.equals(cible)){
             return false;
-        } else if (parent == null){
+        } else if (this.getParent() == null){
             return false;
-        } else if(parent != null && parent.equals(cible.getParent()) ){
+        } else if(getParent()  != null && getParent() .equals(cible.getParent()) ){
             return true;
         }
           else{
@@ -394,7 +368,7 @@ public class Personne implements Serializable {
 
 
          // Fonction qui nous permet de savoir si une personne est le descendant d'une autre personne
-/*
+
     public boolean estDescendantde(Personne cible) {
         if(cible.getDescendants().contains(this)) {
             return true;
@@ -402,7 +376,7 @@ public class Personne implements Serializable {
             return false;
         }
     }
-*/
+
 
 
       // Fonction qui nous permet de savoir si une personne est le cousin d'une autre personne
@@ -486,12 +460,12 @@ public void aQuelLienAvec(Personne cible) {
         } else if(this.estCousinde(cible)){
             System.out.println(this+" est le cousin de "+cible);
 
-      /*   } else if(this.estAscendantde(cible)){
+    } else if(this.estAscendantde(cible)){
             System.out.println(this+" est l'ascendant de "+cible);
-*/
-       /* } else if(this.estDescendantde(cible)){
+
+ } else if(this.estDescendantde(cible)){
             System.out.println(this+" est le descendant de "+cible);
-            */
+
 
 
         } else if(this.estNeveude(cible) ){

@@ -104,40 +104,11 @@ public class ArbreGene implements Serializable {
 				p1 = pers;
 			}
 		}
-		if (p1 == null) {
-			System.out.println("\n Mauvaise entrée \n");
-			RetrouverPersonne();
-		}
+
 		return p1;
 	}
 
-/*
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Entrez le nom de la personne ");
-		String nom = sc.nextLine();
-		System.out.println("Entrez son prénom ");
-		String Prenoms = sc.nextLine();
-		System.out.println("Entrez son sexe (M ou F)");
-		String sexe = sc.nextLine();
-		System.out.println("Entrez sa date de naissance (jour/Mois/Annee)");
-		String dateNaiss = sc.nextLine();
 
-			while (!dateNaiss.matches("[0-9]{2}/[0-9]{2}/[0-9]{4}")) {
-				System.out.println("Erreur format");
-				dateNaiss = sc.nextLine();
-
-			}
-			Personne person = null;
-			for( Personne p : arbre) {
-				if (p.getNom().equalsIgnoreCase(nom) && p.getPrenoms().equalsIgnoreCase(Prenoms) &&
-						p.getSexe().equalsIgnoreCase(sexe) && p.getdateNaissance().equalsIgnoreCase(dateNaiss)) {
-					person= p;
-					break;
-				}
-			}
-			return person;
-
-	} */
 
 // Fonction pour sérialiser un objet arbre
 
@@ -247,7 +218,7 @@ public class ArbreGene implements Serializable {
 					CreerEnfant(pers);
 					pers.setEnfants(pers.getEnfants());
 					int index;
-					for (Personne enf: pers.getEnf()){
+					for (Personne enf: pers.getEnf()){ // pour que les enfants aient des id relatifs à celui de leur parent
 						index = pers.getEnf().indexOf(enf)+1;
 						enf.setId(pers.getId()+""+index);
 
@@ -288,12 +259,14 @@ public class ArbreGene implements Serializable {
         System.out.println("4 - Afficher les frères et soeurs d'une personne");
         System.out.println("5 - Afficher le frère aîné d'une personne");
         System.out.println("6 - Afficher tous les ascendants d'une personne");
-        System.out.println("7 - Afficher les cousins d'une personne");
-        System.out.println("8 - Afficher les onles et tantes d'une personne");
-        System.out.println("9 - Afficher les neveux et nièces d'une personne");
+        System.out.println("7 - Afficher tous les descendants d'une personne");
+        System.out.println("8 - Afficher les cousins d'une personne");
+        System.out.println("9 - Afficher les onles et tantes d'une personne");
+        System.out.println("10 - Afficher les neveux et nièces d'une personne");
+        System.out.println("11- Afficher l'ancêtre d'une personne");
 
-        System.out.println("10- Revenir au menu principal");
-        System.out.println("11- Quitter");
+        System.out.println("12- Revenir au menu principal");
+        System.out.println("13- Quitter");
 
 		System.out.println("\n-------------------------\n");
 		System.out.println("Choisissez une option\n");
@@ -304,90 +277,133 @@ public class ArbreGene implements Serializable {
          switch (selection) {
         case 1:
             // Afficher l'arbre généalogique d'une personne
-			System.out.println("Entrez les infos de la personne dont vous voir l'arbre");
+			System.out.println("Entrez l'id de la personne dont vous voulez voir l'arbre");
 					Personne person = RetrouverPersonne();
-					if (person == null)
+					while (person == null){
 							System.out.println("Cette personne n'existe pas dans l'arbre");
-					else {
-						parcoursProfondeur( person);
+							person = this.RetrouverPersonne();
 					}
+					parcoursProfondeur( person);
+
 
 			lienDesMenus();
             break;
         case 2:
            // Afficher le parent d'une personne;
-			System.out.println("Entrez les infos de la personne dont vous voir les enfants");
+			System.out.println("Entrez l'id de la personne dont vous voulez voir le parent");
 					Personne pers1 = this.RetrouverPersonne();
-					if (pers1 == null)
+					while (pers1 == null){
 							System.out.println("Cette personne n'existe pas dans l'arbre");
-					else {
-						System.out.println(pers1.getParent());
+							pers1 = this.RetrouverPersonne();
 					}
+						System.out.println(pers1.getParent());
+
 			lienDesMenus();
             break;
          case 3:
             // Afficher les enfants d'une personne
-			 System.out.println("Entrez les infos de la personne dont vous voir les enfants");
+			 System.out.println("Entrez l'id de la personne dont vous voulez voir les enfants");
 					Personne pers2 = this.RetrouverPersonne();
-					if (pers2 == null)
+					while (pers2 == null){
 							System.out.println("Cette personne n'existe pas dans l'arbre");
-					else {
-						System.out.println(pers2.getEnf());
-					}
+							pers2 = this.RetrouverPersonne();}
+					System.out.println(pers2.getEnf());
+
 
 			 lienDesMenus();
             break;
         case 4:
            // Afficher les frères et soeurs d'une personne;
-			System.out.println("Entrez les infos de la personne dont vous voir les enfants");
+			System.out.println("Entrez l'id de la personne dont vous voulez voir les frères et soeurs");
 					Personne pers3 = RetrouverPersonne();
-
-						System.out.println(pers3.getFraternels());
+					while (pers3 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers3 = RetrouverPersonne();}
+					System.out.println(pers3.getFraternels());
 			lienDesMenus();
             break;
 		case 5:
             // Afficher le frère aîné d'une personne
 			System.out.println("Entrez l'id de la personne dont vous voulez voir l'ainé'");
 			Personne pers4 = RetrouverPersonne();
+			while (pers4 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers4 = this.RetrouverPersonne();
+					}
 			System.out.println(pers4.getAine());
 			lienDesMenus();
             break;
         case 6:
            // Afficher tous les ascendants d'une personne
-			System.out.println("Entrez les infos de la personne dont vous voir les ascendants");
+			System.out.println("Entrez l'id de la personne dont vous voulez voir les ascendants");
 			Personne pers5 = RetrouverPersonne();
+			while (pers5 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers5 = this.RetrouverPersonne();
+					}
 			System.out.println(pers5.getAscendants());
 			lienDesMenus();
             break;
-         case 7:
-            // Afficher tous les cousins d'une personne
-			 System.out.println("Entrez les infos de la personne dont vous voir les cousins");
-					Personne pers6 = this.RetrouverPersonne();
-					if (pers6 == null)
+        case 7:
+           // Afficher tous les descendants d'une personne
+			System.out.println("Entrez l'id de la personne dont vous voulez voir les descendants");
+			Personne pers6 = RetrouverPersonne();
+			while (pers6 == null){
 							System.out.println("Cette personne n'existe pas dans l'arbre");
-					else {
-						System.out.println(pers6.getCousins());
+							pers6 = this.RetrouverPersonne();
 					}
+			System.out.println(pers6.getDescendants());
+			lienDesMenus();
+            break;
+         case 8:
+            // Afficher tous les cousins d'une personne
+			 System.out.println("Entrez l'id de la personne dont vous voulez voir les cousins");
+					Personne pers7 = this.RetrouverPersonne();
+					while (pers7 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers7 = this.RetrouverPersonne();
+					}
+						System.out.println(pers7.getCousins());
 			 lienDesMenus();
             break;
-        case 8:
+        case 9:
            // Afficher les onles et tantes d'une personne
-			System.out.println("Entrez les infos de la personne dont vous voir les enfants");
-			Personne pers7 = RetrouverPersonne();
-			System.out.println(pers7.getOncles());
+			System.out.println("Entrez l'id de la personne dont vous voulez voir les oncles et tantes");
+			Personne pers8 = RetrouverPersonne();
+			while (pers8 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers8 = this.RetrouverPersonne();
+					}
+			System.out.println(pers8.getOncles());
 			lienDesMenus();
 			break;
-		case 9:
+		case 10:
            // Afficher les neveux et nièces d'une personne
-			System.out.println("Entrez les infos de la personne dont vous voir les enfants");
-			Personne pers = RetrouverPersonne();
-			System.out.println(pers.getNeveux());
+			System.out.println("Entrez l'id de la personne dont vous voulez voir les neveux et nièces");
+			Personne pers9 = RetrouverPersonne();
+			while (pers9 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers9 = this.RetrouverPersonne();
+					}
+			System.out.println(pers9.getNeveux());
 			lienDesMenus();
             break;
-        case 10:
+        case 11:
+            // Afficher l'ancêtre d'une personne
+			 System.out.println("Entrez les infos de la personne dont vous voulez voir l'ancêtre'");
+					Personne pers10 = this.RetrouverPersonne();
+					while (pers10 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers10 = this.RetrouverPersonne();
+					}
+						System.out.println(pers10.getAncetre());
+
+			 lienDesMenus();
+            break;
+        case 12:
              lienDesMenus();
             break;
-        case 11:
+        case 13:
             System.exit(0);
             break;
         default:
@@ -421,27 +437,24 @@ public class ArbreGene implements Serializable {
         switch (selection) {
         case 1:
             // Voir les liens de parenté entre deux personnes
-			System.out.println("Entrez les infos de la personne 1");
+			System.out.println("Entrez l'id de la personne 1");
 			Personne pers1 = this.RetrouverPersonne();
-
-			if (pers1 == null )
-				System.out.println("La personne 1 n'existe pas dans l'arbre");
-
-			else {
-				System.out.println("Entrez les infos de la personne 2");
+			while (pers1 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers1 = this.RetrouverPersonne();
+					}
+				System.out.println("\n Entrez l'id de la personne 2");
 				Personne pers2 = this.RetrouverPersonne();
-				if ( pers2 == null)
-				System.out.println("La personne 2 n'existe pas dans l'arbre");
-
-				else {
-					pers1.aQuelLienAvec(pers2);
-					lienDesMenus();
-					} }
-
+				while (pers2 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers2 = this.RetrouverPersonne();
+					}
+			pers1.aQuelLienAvec(pers2);
 			lienDesMenus();
             break;
         case 2:
            // Vérifier si deux personnes ont un lien de parenté précis
+			menu5();
 			lienDesMenus();
             break;
         case 3:
@@ -481,18 +494,71 @@ public class ArbreGene implements Serializable {
          switch (selection) {
         case 1:
             // parent-enfant
+			System.out.println("Entrez l'id' du parent");
+			Personne pers1 = this.RetrouverPersonne();
+			while (pers1 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers1 = this.RetrouverPersonne();
+					}
+				System.out.println("\n Entrez l'id de l'enfant");
+				Personne pers2 = this.RetrouverPersonne();
+				while (pers2 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers2 = this.RetrouverPersonne();
+					}
+			pers1.estParentde(pers2);
 			lienDesMenus();
             break;
         case 2:
            // cousins
+			System.out.println("Entrez l'id de la personne 1");
+			Personne pers3 = this.RetrouverPersonne();
+			while (pers3 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers3 = this.RetrouverPersonne();
+					}
+				System.out.println("\n Entrez l'id de la personne 2");
+				Personne pers4 = this.RetrouverPersonne();
+				while (pers4 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers4 = this.RetrouverPersonne();
+					}
+			pers3.estCousinde(pers4);
 			lienDesMenus();
             break;
          case 3:
             // oncle/tante - neveux/nièces
+
+			 System.out.println("Entrez l'id de l'oncle/la tante");
+			Personne pers5 = this.RetrouverPersonne();
+			while (pers5 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers5 = this.RetrouverPersonne();
+					}
+				System.out.println("\n Entrez l'id du neveu/la nièce");
+				Personne pers6 = this.RetrouverPersonne();
+				while (pers6 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers6 = this.RetrouverPersonne();
+					}
+			pers5.estOnclede(pers6);
 			 lienDesMenus();
             break;
         case 4:
            // ascendant-descendant
+			 System.out.println("Entrez l'id de l'ascendant");
+			Personne pers7 = this.RetrouverPersonne();
+			while (pers7 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers7 = this.RetrouverPersonne();
+					}
+				System.out.println("\n Entrez l'id du descendant'");
+				Personne pers8 = this.RetrouverPersonne();
+				while (pers8 == null){
+							System.out.println("Cette personne n'existe pas dans l'arbre");
+							pers8 = this.RetrouverPersonne();
+					}
+			pers8.estOnclede(pers8);
 			lienDesMenus();
             break;
         case 5:
