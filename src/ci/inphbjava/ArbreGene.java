@@ -146,10 +146,10 @@ public class ArbreGene implements Serializable {
 // Fonction qui affiche un arbre suivant un parcours en profondeur
 
 	public  void parcoursProfondeur( Personne p ) {
-		for (int i=0;i<p.nombreAscendants();i++){ System.out.print("*   ");
+		for (int i=0;i<p.nombreAscendants();i++){ System.out.print("*  ");
 		}
 		System.out.println(p);
-		for (Personne pers: p.getEnf()){
+		for (Personne pers: p.getEnfants()){
 			parcoursProfondeur(pers);
 		}
 	}
@@ -268,7 +268,7 @@ public class ArbreGene implements Serializable {
 				System.out.println("\nCette personne n'existe pas dans l'arbre\n");
 				person = this.RetrouverPersonne();
 			}
-			parcoursProfondeur( person);
+			parcoursProfondeur(person);
 			lienDesMenus();
             break;
         case 2:
