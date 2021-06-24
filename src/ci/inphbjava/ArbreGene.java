@@ -546,7 +546,7 @@ public class ArbreGene implements Serializable {
 				System.out.println("\nCette personne n'existe pas dans l'arbre\n");
 				pers8 = this.RetrouverPersonne();
 			}
-			System.out.println(pers8.estAscendantde(pers8));
+			System.out.println(pers7.estAscendantde(pers8));
 			lienDesMenus();
             break;
         case 5:

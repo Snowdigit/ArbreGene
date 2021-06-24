@@ -228,7 +228,7 @@ public class Personne implements Serializable {
             for (Personne e: this.getEnf() ){
             descendants.add(e);
             descendants.addAll(e.getDescendants());}
-             return descendants;
+            return descendants;
         }
 
 
@@ -241,9 +241,11 @@ public class Personne implements Serializable {
 
     public LinkedList<Personne> getOncles() {
         LinkedList<Personne> oncles = new LinkedList<Personne>();
-        if (!this.getParent().getFraternels().isEmpty()) {
-            // oncles.addAll(this.getParent().);
-            oncles.addAll(this.getParent().getFraternels());
+        if (this.getParent() != null) {
+            if (!this.getParent().getFraternels().isEmpty()) {
+                // oncles.addAll(this.getParent().);
+                oncles.addAll(this.getParent().getFraternels());
+            }
         }
         return oncles;
     }
@@ -356,11 +358,11 @@ public class Personne implements Serializable {
     // Fonction qui nous permet de savoir si une personne est le descendant d'une autre personne
 
     public boolean estDescendantde(Personne cible) {
-        if(cible.getDescendants().contains(this)) {
+        if(this.getAscendants().contains(cible))
             return true;
-        }else {
+        else
             return false;
-        }
+
     }
 
 
@@ -449,19 +451,17 @@ public void aQuelLienAvec(Personne cible) {
         } else if(this.estCousinde(cible)){
             System.out.println(this.getNom()+" "+this.getPrenoms()+" est le cousin de "+cible.getNom()+" "+ cible.getPrenoms());
 
-        } else if(this.estAscendantde(cible)){
+        } else if(this.estAscendantde(cible) ){
             System.out.println(this.getNom()+" "+this.getPrenoms()+" est l'ascendant de "+cible.getNom()+" "+ cible.getPrenoms());
 
-        } else if(this.estDescendantde(cible)){
+       } else if(this.estDescendantde(cible)){
             System.out.println(this.getNom()+" "+this.getPrenoms()+" est le descendant de "+cible.getNom()+" "+ cible.getPrenoms());
 
-
-
         } else if(this.estNeveude(cible) ){
-            System.out.println(this+" est le neveu de "+cible);
+            System.out.println(this.getNom()+" "+this.getPrenoms()+" est le neveu de "+cible.getNom()+" "+ cible.getPrenoms());
 
         } else if(this.estOnclede(cible) ){
-            System.out.println(this+" est l'oncle de "+cible);
+            System.out.println(this.getNom()+" "+this.getPrenoms()+" est l'oncle de "+cible.getNom()+" "+ cible.getPrenoms());
 
         } else if (this.estEtrangerA(cible))
             System.out.println("ils sont étrangers l'un de l'autre");
