@@ -1,14 +1,9 @@
 package ci.inphbjava;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.time.Period;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
-import java.time.LocalDate;
-
-
 
 
 
@@ -25,7 +20,8 @@ public class Personne implements Serializable {
     private Personne parent;
     private LinkedList<Personne> enfants;
 
-    //Constructeur d'une personne sans parent (sommet d'un arbre)
+
+    //Constructeur d'une personne sans parent (sommet d'un arbre ou ancêtre)
     public Personne(String nom, String prenoms, String sexe, String dateNaissance) {
         id = ""+(++Code);
         this.nom = nom;
@@ -66,6 +62,9 @@ public class Personne implements Serializable {
     public String getPrenoms() {
         return prenoms;
     }
+    public void setPrenoms(String prenm) {
+       this.prenoms = prenm;
+    }
 
     public String getSexe() {
         return sexe;
@@ -87,9 +86,6 @@ public class Personne implements Serializable {
         return getId()+" "+getNom()+" "+getPrenoms()+", "+getSexe()+", "+getdateNaissance();
 
     }
-
-
-
 
 
 
@@ -143,18 +139,12 @@ public class Personne implements Serializable {
     }
 
 
+// setter sur les enfants
     public void setEnfants(LinkedList<Personne> p) {
      this.enfants = p;
     }
 
 
-
-    // la méthode donnerNaissance permet d'attribuer un enfant à une personne
-
-    //public void donnerNaissance(Personne person) {
-
-     //   this.enfants.add(person);
-   // }
 
 // Fonction qui retourne les fraternels (frères & soeurs) d'une personne
 
@@ -169,6 +159,7 @@ public class Personne implements Serializable {
         return fraternels;
     }
 
+// Fonction qui retourne l'ancêtre de la famille
 
    public Personne getAncetre(){
         Personne ancetre ;
@@ -189,14 +180,20 @@ public class Personne implements Serializable {
 // Fonction pour retourner les ascendants d'une personne
 
     public LinkedList<Personne> getAscendants() {
+        LinkedList<Personne> ascdts1 = new LinkedList<Personne>();
         LinkedList<Personne> ascendants = new LinkedList<Personne>();
-        if (parent == null) { //pas de parents
+        if (this.getParent() == null) { //pas de parents
             return ascendants;
 
         } else {
-            ascendants.add(parent);
-            ascendants.addAll(parent.getAscendants());
-        }
+            ascdts1.add(this.getParent());
+            ascdts1.addAll(this.getParent().getAscendants());
+            for (Personne personne: ascdts1) {
+                ascendants.add(personne);
+                ascendants.addAll(personne.getFraternels());}
+
+            }
+
         return ascendants;
     }
 
@@ -231,18 +228,11 @@ public class Personne implements Serializable {
             for (Personne e: this.getEnf() ){
             descendants.add(e);
             descendants.addAll(e.getDescendants());}
-           // for (Personne e: enfants )
-           // descendants.addAll(e.enfants);
              return descendants;
         }
 
 
     }
-
-
-
-
-
 
 
 
@@ -274,9 +264,6 @@ public class Personne implements Serializable {
     }
 
 
-
-
-
     // Fonction qui retourne les cousins d'une personne
 
 
@@ -290,10 +277,8 @@ public class Personne implements Serializable {
     }
 
 
-
-
-
     // Fonction pour retourner le frère ainé d'une personne
+
     public Personne getAine() {
         if (this.parent != null) {
             if (!this.parent.getEnf().isEmpty())
@@ -305,6 +290,9 @@ public class Personne implements Serializable {
 
 
 //************** Lien de parenté entre 2 personnes*****************
+    /* Ces fonctions nous permettent de savoir si deux personnes qu'on choisira ont
+    oui ou non un lien de parenté qu'on choisira
+     */
 
 // Fonction qui nous permet de savoir si une personne est l'enfant d'une autre personne
 
@@ -328,7 +316,7 @@ public class Personne implements Serializable {
             return false;
         }
 
-        if(/*this.getEnf().contains(cible)*/ cible.getParent() == this) {
+        if(cible.getParent() == this) {
             return true;
         } else{
             return false;
@@ -353,9 +341,7 @@ public class Personne implements Serializable {
     }
 
 
-
-
-     // Fonction qui nous permet de savoir si une personne est l'ascendant d'une autre personne
+    // Fonction qui nous permet de savoir si une personne est l'ascendant d'une autre personne
 
     public boolean estAscendantde(Personne cible) {
         if(cible.getAscendants().contains(this)) {
@@ -367,7 +353,7 @@ public class Personne implements Serializable {
 
 
 
-         // Fonction qui nous permet de savoir si une personne est le descendant d'une autre personne
+    // Fonction qui nous permet de savoir si une personne est le descendant d'une autre personne
 
     public boolean estDescendantde(Personne cible) {
         if(cible.getDescendants().contains(this)) {
@@ -394,8 +380,7 @@ public class Personne implements Serializable {
         }
 
 
-
-          // Fonction qui nous permet de savoir si une personne est l'oncle/la tante d'une autre personne
+        // Fonction qui nous permet de savoir si une personne est l'oncle/la tante d'une autre personne
         public boolean estOnclede(Personne cible) {
         if(cible.getOncles().contains(this)) {
             return true;
@@ -403,6 +388,8 @@ public class Personne implements Serializable {
             return false;
         }
     }
+
+
 
       // Fonction qui nous permet de savoir si une personne est le neveu/la nièce d'une autre personne
 
@@ -416,7 +403,10 @@ public class Personne implements Serializable {
 
 
 
-      // Fonction qui nous permet de savoir si une personne est étranger à une autre personne
+    // Fonction qui nous permet de savoir si une personne est étranger à une autre personne
+    /* Cette fonction concerne le membre d'un arbre et celui d'un autre arbre
+     */
+
 
     public boolean estEtrangerA(Personne cible){
         Personne p1 = this;
@@ -445,26 +435,25 @@ public class Personne implements Serializable {
 
 public void aQuelLienAvec(Personne cible) {
 
-        Personne p1 = this;
         if(this.equals(cible)){
-            System.out.println(this+" est la personne elle-même");
+            System.out.println(this.getNom()+" "+this.getPrenoms()+" est la personne elle-même");
         } else if(this.estEnfantde(cible))  {
-            System.out.println(this+" est l'enfant de "+cible);
+            System.out.println(this.getNom()+" "+this.getPrenoms()+" est l'enfant de "+cible.getNom()+" "+ cible.getPrenoms());
         }
           else if(this.estParentde(cible)){
-            System.out.println(this+" est le parent de "+cible);
+            System.out.println(this.getNom()+" "+this.getPrenoms()+" est le parent de "+cible.getNom()+" "+ cible.getPrenoms());
         }
          else if(this.estFraternelde(cible)){
-            System.out.println(this+" est le fraternel de "+cible);
+            System.out.println(this.getNom()+" "+this.getPrenoms()+" est le fraternel de "+cible.getNom()+" "+ cible.getPrenoms());
 
         } else if(this.estCousinde(cible)){
-            System.out.println(this+" est le cousin de "+cible);
+            System.out.println(this.getNom()+" "+this.getPrenoms()+" est le cousin de "+cible.getNom()+" "+ cible.getPrenoms());
 
-    } else if(this.estAscendantde(cible)){
-            System.out.println(this+" est l'ascendant de "+cible);
+        } else if(this.estAscendantde(cible)){
+            System.out.println(this.getNom()+" "+this.getPrenoms()+" est l'ascendant de "+cible.getNom()+" "+ cible.getPrenoms());
 
- } else if(this.estDescendantde(cible)){
-            System.out.println(this+" est le descendant de "+cible);
+        } else if(this.estDescendantde(cible)){
+            System.out.println(this.getNom()+" "+this.getPrenoms()+" est le descendant de "+cible.getNom()+" "+ cible.getPrenoms());
 
 
 
@@ -474,12 +463,12 @@ public void aQuelLienAvec(Personne cible) {
         } else if(this.estOnclede(cible) ){
             System.out.println(this+" est l'oncle de "+cible);
 
-        } else {
+        } else if (this.estEtrangerA(cible))
             System.out.println("ils sont étrangers l'un de l'autre");
         }
     }
 
 
-}
+
 
 

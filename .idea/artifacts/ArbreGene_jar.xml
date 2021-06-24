@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="ArbreGene:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ArbreGene_jar</output-path>
+    <root id="root">
+      <element id="archive" name="ArbreGene.jar">
+        <element id="module-output" name="ArbreGene" />
+      </element>
+    </root>
+  </artifact>
+</component>
