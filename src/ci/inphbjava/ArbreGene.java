@@ -149,7 +149,7 @@ public class ArbreGene implements Serializable {
 		for (int i=0;i<p.nombreAscendants();i++){ System.out.print("*  ");
 		}
 		System.out.println(p);
-		for (Personne pers: p.getEnfants()){
+		for (Personne pers: p.getEnf()){
 			parcoursProfondeur(pers);
 		}
 	}

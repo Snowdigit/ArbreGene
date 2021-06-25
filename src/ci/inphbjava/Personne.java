@@ -121,17 +121,17 @@ public class Personne implements Serializable {
             LinkedList<Personne> enfantstri = new LinkedList<Personne>();
             Personne aine;
             int index = 0, age = 0;
-            while (!enfants.isEmpty()) {
-                for (Personne p : enfants) {
-                    if (p.getAge(p.dateNaissance) > age) {
-                        age = p.getAge(p.dateNaissance);
-                        index = enfants.indexOf(p);
+            while (!this.getEnf().isEmpty()) {
+                for (Personne p : this.getEnf()) {
+                    if (p.getAge(p.getdateNaissance()) > age) {
+                        age = p.getAge(p.getdateNaissance());
+                        index = this.getEnf().indexOf(p);
                     }
 
                 }
-                aine = enfants.get(index);
+                aine = this.getEnf().get(index);
                 enfantstri.add(aine);
-                enfants.remove(aine);
+                this.getEnf().remove(aine);
                 age=0;
             }
 
