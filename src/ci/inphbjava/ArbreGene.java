@@ -86,6 +86,7 @@ public class ArbreGene implements Serializable {
 
 		Personne enfant = new Personne(nom, Prenoms, sexe, dateNaiss, parent);
 		arbre.add(enfant);
+		parent.setEnfants(parent.getEnfants());
 		System.out.println(enfant.getNom()+" "+enfant.getPrenoms()+" \ncréé(e) avec succès\n");
 		//serialisationArbre();
 
