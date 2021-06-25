@@ -147,7 +147,7 @@ public class ArbreGene implements Serializable {
 // Fonction qui affiche un arbre suivant un parcours en profondeur
 
 	public  void parcoursProfondeur( Personne p ) {
-		for (int i=0;i<p.nombreAscendants();i++){ System.out.print("*  ");
+		for (int i=0;i<p.nombreAscendants();i++){ System.out.print("* ");
 		}
 		System.out.println(p);
 		for (Personne pers: p.getEnf()){
